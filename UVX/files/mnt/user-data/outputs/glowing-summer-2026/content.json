@@ -1,0 +1,199 @@
+{
+  "brand": "UVX",
+  "slug": "glowing-summer-2026",
+
+  "title": { "en": "UVX Glowing Summer", "jp": "UVX グローイング・サマー" },
+  "subtitle": { "en": "Tokyo • Rooftop • UV Festival", "jp": "東京・ルーフトップ・UVフェス" },
+
+  "dateText": { "en": "2026/8/1 (Sat) 20:00–05:00", "jp": "2026/8/1 (土) 20:00–05:00" },
+  "venueText": {
+    "en": "Shibuya Rooftop (Secret — details after ticket purchase)",
+    "jp": "渋谷ルーフトップ（シークレット — チケット購入後に公開）"
+  },
+
+  "sections": { "heroBg": "hero.jpg" },
+
+  "hero": {
+    "tagline": { "en": "The Night the Sky Glows", "jp": "空が光る夜" },
+    "lead": {
+      "en": "Tokyo's hottest summer night. Open sky, UV lasers, festival-grade sound and the heat of August — all on one rooftop. Wear white. Glow brighter.",
+      "jp": "東京で最も熱い夏の夜。開放的な空、UVレーザー、フェス級サウンド、8月の熱気——すべてが一つのルーフトップに集結。白を着て、もっと輝いて。"
+    },
+    "vipCallout": {
+      "en": "💎 ROYAL VVIP (¥150,000)\nDM @uvxjapan for Royal VVIP, VIP tables, or summer packages.",
+      "jp": "💎 ロイヤルVVIP（¥150,000）\nロイヤルVVIP／VIPテーブル／サマーパッケージはDM：@uvxjapan"
+    }
+  },
+
+  "links": {
+    "tickets": "https://luma.com/uvxglowingsummer2026",
+    "instagram": "https://instagram.com/uvxjapan",
+    "line": "https://line.me/",
+    "merch": "https://uvxjapan.com/merch"
+  },
+
+  "tiers": [
+    {
+      "id": "general",
+      "name": { "en": "GENERAL", "jp": "一般" },
+      "priceYen": 3000,
+      "badge": { "en": "Early-bird", "jp": "前売特典" },
+      "includes": {
+        "en": "Entry / Welcome Drink ×1 / UV Body Paint Kit",
+        "jp": "入場 / ウェルカムドリンク1杯 / UVボディペイントキット"
+      },
+      "note": { "en": "Limited quantity", "jp": "数量限定" }
+    },
+    {
+      "id": "women",
+      "name": { "en": "WOMEN", "jp": "女性" },
+      "priceYen": 2000,
+      "badge": { "en": "Early-bird", "jp": "前売特典" },
+      "includes": {
+        "en": "Priority Entry / Welcome Drink ×2 / UV Body Paint Kit / Summer Gift",
+        "jp": "優先入場 / ウェルカムドリンク2杯 / UVボディペイントキット / サマーギフト"
+      },
+      "note": { "en": "Limited quantity", "jp": "数量限定" }
+    },
+    {
+      "id": "sunset_vip",
+      "name": { "en": "SUNSET VIP", "jp": "サンセットVIP" },
+      "priceYen": 8000,
+      "badge": { "en": "Sunset Access", "jp": "サンセット入場" },
+      "includes": {
+        "en": "Early entry at 18:00 / Sunset viewing / Cocktail ×2 / Priority standing area",
+        "jp": "18:00アーリー入場 / サンセット観覧 / カクテル2杯 / 優先エリア"
+      },
+      "note": { "en": "Limited to 30 people", "jp": "30名限定" }
+    },
+    {
+      "id": "table_4",
+      "name": { "en": "TABLE FOR 4", "jp": "4名テーブル" },
+      "priceYen": 30000,
+      "badge": { "en": "Table", "jp": "テーブル" },
+      "includes": {
+        "en": "1 Bottle / Priority Entry / 4 guests / UV Paint Kit ×4 / Dedicated server",
+        "jp": "ボトル1本 / 優先入場 / 4名様 / UVペイントキット×4 / 専属サーバー"
+      },
+      "note": { "en": "Best rooftop view", "jp": "最高の眺望席" }
+    },
+    {
+      "id": "vvip_sky",
+      "name": { "en": "VVIP SKY", "jp": "VVIP スカイ" },
+      "priceYen": 60000,
+      "badge": { "en": "Sky Lounge", "jp": "スカイラウンジ" },
+      "includes": {
+        "en": "2 Bottles / Up to 6 guests / Sky lounge seating / Artist meet & greet",
+        "jp": "ボトル2本 / 6名様まで / スカイラウンジ席 / アーティスト面会"
+      },
+      "note": { "en": "DM @uvxjapan for placement", "jp": "席位置の相談は @uvxjapan にDM" }
+    },
+    {
+      "id": "royal_vvip",
+      "name": { "en": "ROYAL VVIP", "jp": "ロイヤルVVIP" },
+      "priceYen": 150000,
+      "badge": { "en": "Royal", "jp": "ロイヤル" },
+      "soldOut": false,
+      "includes": {
+        "en": "Full premium package. DM @uvxjapan for details.",
+        "jp": "フルプレミアムパッケージ。詳細は @uvxjapan にDM。"
+      }
+    }
+  ],
+
+  "content": {
+    "included": {
+      "headline": { "en": "WHAT'S INCLUDED", "jp": "内容" },
+      "items": [
+        { "en": "Welcome Drink ×1", "jp": "ウェルカムドリンク1杯" },
+        { "en": "UV Body Paint Kit", "jp": "UVボディペイントキット" },
+        { "en": "Rooftop Photo Zone", "jp": "ルーフトップフォトゾーン" },
+        { "en": "UVX Performances + UV Laser Show", "jp": "UVXパフォーマンス＋UVレーザーショー" },
+        { "en": "Live DJ Set (Festival Stage)", "jp": "ライブDJセット（フェスステージ）" }
+      ]
+    },
+    "performers": {
+      "headline": { "en": "PERFORMERS", "jp": "パフォーマー" },
+      "items": [
+        { "en": "UVX Dancers — \"Summer Glow Edition\"", "jp": "UVX Dancers — 「サマーグロウエディション」" },
+        { "en": "UV Acrobatic Duo (Fire & Glow)", "jp": "UVアクロバティックデュオ（ファイア＆グロウ）" },
+        { "en": "Guest DJ — TBA", "jp": "ゲストDJ — 近日発表" },
+        { "en": "Instagram: @uvxdancers", "jp": "Instagram: @uvxdancers" }
+      ]
+    },
+    "music": {
+      "headline": { "en": "MUSIC", "jp": "音楽" },
+      "text": {
+        "en": "Summer festival energy — Deep House / Tech House / Progressive EDM / Tropical Beats. Non-stop from 20:00 to sunrise.",
+        "jp": "夏フェスエナジー — ディープハウス / テックハウス / プログレッシブEDM / トロピカルビート。20:00からサンライズまでノンストップ🌅"
+      }
+    },
+    "dress": {
+      "headline": { "en": "DRESS CODE", "jp": "ドレスコード" },
+      "text": { "en": "White / Neon / UV-reactive • Swimwear-inspired encouraged", "jp": "白 / ネオン / UV反応素材 • 水着インスパイア歓迎" }
+    },
+    "drinks": {
+      "headline": { "en": "DRINK & FOOD", "jp": "ドリンク＆フード" },
+      "text": {
+        "en": "Tropical Cocktails / Premium Champagne / Craft Beer • Summer BBQ bites / Fruit platters / Shaved ice",
+        "jp": "トロピカルカクテル・シャンパン・クラフトビール／夏BBQ軽食／フルーツ盛り／かき氷"
+      }
+    },
+    "vip": {
+      "headline": { "en": "VIP TABLE", "jp": "VIPテーブル" },
+      "text": { "en": "Sky-view seating + Bottle service + Priority rooftop access. DM: @uvxjapan", "jp": "空見える席＋ボトル＋ルーフトップ優先入場。DM: @uvxjapan" }
+    }
+  },
+
+  "vipFlow": {
+    "headline": { "en": "VIP FLOW", "jp": "VIP導線" },
+    "steps": [
+      {
+        "title": { "en": "1) Buy on Luma", "jp": "1) Lumaで購入" },
+        "text": { "en": "Choose your tier and purchase on Luma.", "jp": "Lumaでチケットを購入してください。" }
+      },
+      {
+        "title": { "en": "2) Get rooftop address", "jp": "2) ルーフトップ住所を受け取る" },
+        "text": { "en": "Secret address sent after payment confirmation.", "jp": "支払い確認後にシークレットアドレスをお送りします。" }
+      },
+      {
+        "title": { "en": "3) Show QR & glow", "jp": "3) QR提示して輝く" },
+        "text": { "en": "Flash your QR at the rooftop entrance and join the glow.", "jp": "ルーフトップ入口でQRを提示して参加。" }
+      }
+    ]
+  },
+
+  "media": {
+    "videos": {
+      "headline": { "en": "VIDEO", "jp": "ビデオ" },
+      "items": [
+        {
+          "type": "youtube",
+          "url": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+          "title": { "en": "Summer Aftermovie", "jp": "サマーアフタームービー" }
+        }
+      ]
+    },
+    "photos": {
+      "headline": { "en": "PHOTOS", "jp": "写真" },
+      "text": {
+        "en": "Highlights from past UVX summer events. This is what waits for you.",
+        "jp": "過去のUVXサマーイベントのハイライト。これがあなたを待っている。"
+      },
+      "note": {
+        "en": "Rooftop photo zone available all night. Tag us @uvxjapan.",
+        "jp": "ルーフトップフォトゾーン終夜開放。@uvxjapan をタグ付けして。"
+      },
+      "images": [
+        "gallery-1.jpg", "gallery-2.jpg", "gallery-3.jpg",
+        "gallery-4.jpg", "gallery-5.jpg", "gallery-6.jpg",
+        "gallery-7.jpg", "gallery-8.jpg", "gallery-9.jpg", "gallery-10.jpg"
+      ]
+    }
+  },
+
+  "policy": {
+    "en": "Cancellation policy: refunds not available within 72 hours of event start. Rain or shine — event proceeds indoors if needed.",
+    "jp": "キャンセルポリシー：イベント開始72時間以内は返金不可。雨天の場合も開催します（必要に応じて屋内に変更）。"
+  }
+}
