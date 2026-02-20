@@ -1,2 +1,0 @@
-# uvx
-UVX Landing Page
