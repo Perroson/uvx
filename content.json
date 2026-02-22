@@ -17,7 +17,7 @@
     "tagline": { "en": "Love Glows in the Dark", "jp": "Love Glows in the Dark" },
     "lead": {
       "en": "For one night in Roppongi, neon meets festival-grade sound and showtime energy. Dress to glow. Come for the vibe, stay for the moment.",
-      "jp": "六本木で一夜だけ、ネオンと音が交差する \"UV White Day\"。フェス級のサウンド、光る演出、ショータイムまで——全部まとめて体験する夜。"
+      "jp": "六本木で一夜だけ、ネオンと音が交差する "UV White Day"。フェス級のサウンド、光る演出、ショータイムまで——全部まとめて体験する夜。"
     },
     "vipCallout": {
       "en": "💎 ROYAL VVIP (¥100,000 / ¥300,000)\nDM @uvxjapan for Royal VVIP, VIP tables, or tickets.",
@@ -30,6 +30,12 @@
     "instagram": "https://instagram.com/uvxjapan",
     "line": "https://line.me/",
     "merch": ""
+  },
+
+  "music_url": {
+    "en": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+    "jp": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+    "_comment": "Paste YouTube URLs for each language. Use the same URL for both if you only have one track."
   },
 
   "tiers": [
