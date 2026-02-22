@@ -103,12 +103,21 @@
   .hero-bg {
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(191,0,255,0.18) 0%, transparent 70%),
-      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(0,245,255,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(255,45,120,0.15) 0%, transparent 60%),
-      var(--dark);
+    background-image: url('hero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 0;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(191,0,255,0.55) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 20% 80%, rgba(0,245,255,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 20%, rgba(255,45,120,0.45) 0%, transparent 60%),
+      rgba(6,4,16,0.65);
   }
   .hero-grid {
     position: absolute;
@@ -518,13 +527,14 @@
     $('gallery-text').textContent = t(d.media.photos.text);
     $('gallery-note').textContent = t(d.media.photos.note);
 
-    const images = (d.media.photos.images || []).filter(img => !img.startsWith?.('_'));
-    $('gallery-grid').innerHTML = images.map(img => {
-      const isUrl = img.startsWith('http') || img.startsWith('/') || img.endsWith('.jpg') || img.endsWith('.png') || img.endsWith('.webp');
-      return isUrl
-        ? `<div class="gallery-item"><img src="${img}" alt="UVX event photo" loading="lazy" onerror="this.parentElement.classList.add('placeholder');this.remove();this.parentElement.innerHTML='📸'"></div>`
-        : `<div class="gallery-item placeholder">📸</div>`;
-    }).join('');
+    // Auto-load gallery-1.jpg through gallery-10.jpg from the same folder
+    const galleryImages = Array.from({length: 10}, (_, i) => `gallery-${i + 1}.jpg`);
+    $('gallery-grid').innerHTML = galleryImages.map(img => `
+      <div class="gallery-item">
+        <img src="${img}" alt="UVX event photo" loading="lazy"
+          onerror="this.parentElement.style.display='none'">
+      </div>
+    `).join('');
 
     // Policy
     $('policy-bar').textContent = t(d.policy);
