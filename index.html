@@ -261,6 +261,33 @@
     .flow-step { border-right: 1px solid rgba(0,245,255,0.1); }
   }
   @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ── MUSIC PLAYER ── */
+  #music-player {
+    position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 1000;
+    display: none; align-items: center; gap: 0.75rem;
+    background: rgba(13,8,32,0.92); backdrop-filter: blur(12px);
+    border: 1px solid var(--neon-cyan); box-shadow: var(--glow-cyan);
+    padding: 0.6rem 1rem; transition: all 0.3s;
+  }
+  #music-player.visible { display: flex; }
+  #music-player:hover { box-shadow: 0 0 20px #00f5ff, 0 0 50px #00f5ff80; }
+  #music-toggle { background: none; border: none; cursor: pointer; color: var(--neon-cyan); font-size: 1.3rem; line-height: 1; padding: 0; transition: transform 0.2s; }
+  #music-toggle:hover { transform: scale(1.2); }
+  #music-info { display: flex; flex-direction: column; max-width: 160px; }
+  #music-label-txt { font-size: 0.55rem; letter-spacing: 0.25em; color: var(--neon-cyan); text-transform: uppercase; opacity: 0.7; }
+  #music-title { font-family: 'Bebas Neue', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #music-bar { display: flex; gap: 2px; align-items: flex-end; height: 16px; }
+  #music-bar span { display: block; width: 3px; background: var(--neon-pink); border-radius: 2px; animation: barBounce 0.8s ease-in-out infinite; }
+  #music-bar span:nth-child(1) { animation-delay: 0s; height: 8px; }
+  #music-bar span:nth-child(2) { animation-delay: 0.15s; height: 14px; }
+  #music-bar span:nth-child(3) { animation-delay: 0.3s; height: 6px; }
+  #music-bar span:nth-child(4) { animation-delay: 0.45s; height: 12px; }
+  #music-bar.paused span { animation-play-state: paused; }
+  @keyframes barBounce { 0%,100%{transform:scaleY(0.4)} 50%{transform:scaleY(1)} }
+  #yt-player { position: fixed; top: -9999px; left: -9999px; width: 1px; height: 1px; }
+  #music-vol { -webkit-appearance: none; appearance: none; width: 60px; height: 3px; background: rgba(0,245,255,0.3); outline: none; cursor: pointer; }
+  #music-vol::-webkit-slider-thumb { -webkit-appearance: none; width: 10px; height: 10px; border-radius: 50%; background: var(--neon-cyan); cursor: pointer; }
 </style>
 </head>
 <body>
@@ -268,9 +295,21 @@
 <!-- LOADING -->
 <div id="loading"><div class="loading-brand" id="loading-brand">UVX</div></div>
 
+<!-- MUSIC PLAYER -->
+<div id="music-player">
+  <button id="music-toggle" onclick="toggleMusic()" title="Play/Pause">▶</button>
+  <div id="music-info">
+    <span id="music-label-txt">NOW PLAYING</span>
+    <span id="music-title">UVX MUSIC</span>
+  </div>
+  <div id="music-bar" class="paused"><span></span><span></span><span></span><span></span></div>
+  <input id="music-vol" type="range" min="0" max="100" value="70" oninput="setVolume(this.value)" title="Volume">
+</div>
+<div id="yt-player"></div>
+
 <!-- LANG TOGGLE -->
 <div id="lang-toggle">
-  <button class="active" onclick="setLang('en')">EN</button>
+  <button onclick="setLang('en')">EN</button>
   <button onclick="setLang('jp')">JP</button>
 </div>
 
@@ -377,35 +416,48 @@
 </footer>
 
 <script>
-  let data = null, lang = 'en';
-  const t = (o) => o ? (o[lang] || o['en'] || '') : '';
-  const $ = (id) => document.getElementById(id);
-  const yen = (n) => '¥' + Number(n).toLocaleString();
+  // ── LANGUAGE AUTO-DETECTION ──────────────────────────────────
+  const browserLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+  let lang = browserLang.startsWith('ja') ? 'jp' : 'en';
+  let data = null;
 
-  function extractYoutubeId(url) {
+  const t   = (o) => o ? (o[lang] || o['en'] || '') : '';
+  const $   = (id) => document.getElementById(id);
+  const yen = (n)  => '¥' + Number(n).toLocaleString();
+
+  // Sync lang toggle button to auto-detected language ASAP
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.remove('active'));
+    document.querySelector(lang === 'jp' ? '#lang-toggle button:last-child' : '#lang-toggle button:first-child')
+      ?.classList.add('active');
+  });
+
+  // ── YOUTUBE ID ───────────────────────────────────────────────
+  function extractVideoId(url) {
     if (!url) return null;
-    const m = url.match(/(?:v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    const m = url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
     return m ? m[1] : null;
   }
 
+  // ── RENDER ───────────────────────────────────────────────────
   function render() {
     if (!data) return;
     const d = data;
 
     document.title = `${d.brand} — ${t(d.title)}`;
     $('loading-brand').textContent = d.brand;
-    $('hero-brand').textContent = d.brand;
-    $('footer-brand').textContent = d.brand;
+    $('hero-brand').textContent    = d.brand;
+    $('footer-brand').textContent  = d.brand;
 
     // Hero
-    $('hero-title').textContent = t(d.title);
-    $('hero-subtitle').textContent = t(d.subtitle);
-    $('hero-tagline').textContent = t(d.hero.tagline);
-    $('hero-lead').textContent = t(d.hero.lead);
+    $('hero-title').textContent       = t(d.title);
+    $('hero-subtitle').textContent    = t(d.subtitle);
+    $('hero-tagline').textContent     = t(d.hero.tagline);
+    $('hero-lead').textContent        = t(d.hero.lead);
     $('hero-vip-callout').textContent = t(d.hero.vipCallout);
     $('hero-cta').innerHTML = `
-      ${d.links.tickets ? `<a href="${d.links.tickets}" class="btn btn-primary" target="_blank">${lang==='jp'?'チケット購入':'BUY TICKET'}</a>` : ''}
-      ${d.links.instagram ? `<a href="${d.links.instagram}" class="btn btn-outline" target="_blank">@${d.links.instagram.split('/').pop().toUpperCase()}</a>` : ''}
+      ${d.links.tickets   ? `<a href="${d.links.tickets}"   class="btn btn-primary" target="_blank">${lang==='jp'?'チケット購入':'BUY TICKET'}</a>` : ''}
+      ${d.links.instagram ? `<a href="${d.links.instagram}" class="btn btn-outline"  target="_blank">@${d.links.instagram.split('/').pop().toUpperCase()}</a>` : ''}
     `;
 
     // Info bar
@@ -432,62 +484,63 @@
     const c = d.content;
     const cards = [
       c.included ? {title:t(c.included.headline), body:`<ul class="card-body">${c.included.items.map(i=>`<li>${t(i)}</li>`).join('')}</ul>`} : null,
-      c.drinks   ? {title:t(c.drinks.headline),   body:`<p class="card-body">${t(c.drinks.text)}</p>`} : null,
-      c.vip      ? {title:t(c.vip.headline),      body:`<p class="card-body">${t(c.vip.text)}</p>`} : null,
-      c.dress    ? {title:t(c.dress.headline),    body:`<p class="card-body">${t(c.dress.text)}</p>`} : null,
+      c.drinks   ? {title:t(c.drinks.headline),   body:`<p  class="card-body">${t(c.drinks.text)}</p>`}   : null,
+      c.vip      ? {title:t(c.vip.headline),      body:`<p  class="card-body">${t(c.vip.text)}</p>`}      : null,
+      c.dress    ? {title:t(c.dress.headline),    body:`<p  class="card-body">${t(c.dress.text)}</p>`}    : null,
     ].filter(Boolean);
-    $('content-grid').innerHTML = cards.map(card=>`
-      <div class="content-card"><div class="card-title">${card.title}</div>${card.body}</div>`).join('');
+    $('content-grid').innerHTML = cards.map(card =>
+      `<div class="content-card"><div class="card-title">${card.title}</div>${card.body}</div>`).join('');
 
     // Performers
-    $('performers-label').textContent = lang==='jp' ? 'パフォーマー' : 'PERFORMERS';
-    $('performers-headline').textContent = lang==='jp' ? 'ショータイム' : 'SHOWTIME';
+    $('performers-label').textContent   = lang==='jp' ? 'パフォーマー' : 'PERFORMERS';
+    $('performers-headline').textContent = lang==='jp' ? 'ショータイム'  : 'SHOWTIME';
     if (c.performers) {
-      $('performers-content').innerHTML = c.performers.items.map(i=>
+      $('performers-content').innerHTML = c.performers.items.map(i =>
         `<div style="margin-bottom:0.6rem;padding-left:1rem;border-left:2px solid var(--neon-pink);">${t(i)}</div>`
       ).join('');
     }
 
     // VIP Flow
     $('flow-headline').textContent = t(d.vipFlow.headline);
-    $('flow-label').textContent = lang==='jp' ? '参加方法' : 'HOW IT WORKS';
-    $('flow-steps').innerHTML = d.vipFlow.steps.map((step,i)=>`
+    $('flow-label').textContent    = lang==='jp' ? '参加方法' : 'HOW IT WORKS';
+    $('flow-steps').innerHTML = d.vipFlow.steps.map((step,i) => `
       <div class="flow-step">
         <div class="step-num">0${i+1}</div>
         <div class="step-title">${t(step.title)}</div>
         <p class="step-text">${t(step.text)}</p>
       </div>`).join('');
 
-    // Music
+    // Music section text
     $('music-label').textContent = lang==='jp' ? '音楽' : 'MUSIC';
     if (c.music) {
       $('music-headline').textContent = t(c.music.headline);
-      $('music-text').textContent = t(c.music.text);
+      $('music-text').textContent     = t(c.music.text);
     }
 
     // Video
     const videos = d.media?.videos?.items;
     if (videos && videos.length) {
-      const vid = extractYoutubeId(videos[0].url);
+      const vid = extractVideoId(videos[0].url);
       if (vid && !videos[0].url.includes('XXXXXXXXX')) {
         $('video-section').style.display = '';
-        $('video-label').textContent = lang==='jp' ? 'ビデオ' : 'VIDEO';
-        $('video-headline').textContent = t(d.media.videos.headline);
-        $('video-container').innerHTML = `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen></iframe></div>`;
+        $('video-label').textContent     = lang==='jp' ? 'ビデオ' : 'VIDEO';
+        $('video-headline').textContent  = t(d.media.videos.headline);
+        $('video-container').innerHTML   =
+          `<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/${vid}" frameborder="0" allowfullscreen></iframe></div>`;
       }
     }
 
-    // VIP CTA section
+    // VIP CTA
     $('vip-label').textContent = lang==='jp' ? 'VIPテーブル' : 'VIP TABLE';
     if (c.vip) {
       $('vip-headline').textContent = t(c.vip.headline);
-      $('vip-text').textContent = t(c.vip.text);
+      $('vip-text').textContent     = t(c.vip.text);
     }
     $('vip-cta').innerHTML = d.links.instagram
       ? `<a href="${d.links.instagram}" class="btn btn-primary" target="_blank">${lang==='jp'?'DM @uvxjapan':'DM @UVXJAPAN'}</a>`
       : '';
 
-    // Policy & Footer
+    // Footer / policy
     $('policy-bar').textContent = t(d.policy);
     const socials = [
       d.links.instagram && {href:d.links.instagram, label:`INSTAGRAM @${d.links.instagram.split('/').pop().toUpperCase()}`},
@@ -495,28 +548,100 @@
       d.links.merch     && {href:d.links.merch,     label:lang==='jp'?'グッズ':'MERCH'},
       d.links.tickets   && {href:d.links.tickets,   label:lang==='jp'?'チケット購入':'BUY TICKET'},
     ].filter(Boolean);
-    $('social-links').innerHTML = socials.map(s=>`<a class="social-link" href="${s.href}" target="_blank">${s.label}</a>`).join('');
+    $('social-links').innerHTML = socials.map(s =>
+      `<a class="social-link" href="${s.href}" target="_blank">${s.label}</a>`).join('');
     $('copyright').textContent = `© ${new Date().getFullYear()} ${d.brand} — ALL RIGHTS RESERVED`;
 
-    // Hero entrance
+    // Music player label
+    if ($('music-title') && data?.content?.music?.headline) {
+      $('music-title').textContent = t(data.content.music.headline);
+    }
+
+    // Hero entrance animation
     document.querySelectorAll('.hero > *').forEach((el,i) => {
       el.style.animation = `fadeUp 0.8s ease ${i*0.1}s both`;
     });
   }
 
+  // ── LANGUAGE TOGGLE ──────────────────────────────────────────
   function setLang(l) {
     lang = l;
-    document.querySelectorAll('#lang-toggle button').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('#lang-toggle button').forEach(b => b.classList.remove('active'));
     document.querySelector(`#lang-toggle button:${l==='en'?'first-child':'last-child'}`).classList.add('active');
     render();
+    // Switch music track if a different URL is defined for this language
+    if (data?.music_url && typeof data.music_url === 'object') {
+      const newUrl = data.music_url[l] || data.music_url['en'];
+      const newId  = extractVideoId(newUrl);
+      if (newId && newUrl && !newUrl.includes('XXXXXXXXX') && ytPlayer) {
+        const curId = ytPlayer.getVideoData?.()?.video_id;
+        if (newId !== curId) {
+          ytPlayer.loadVideoById(newId);
+          if ($('music-title') && data.content?.music?.headline) {
+            $('music-title').textContent = data.content.music.headline[l] || data.content.music.headline['en'] || 'UVX MUSIC';
+          }
+        }
+      }
+    }
   }
 
+  // ── MUSIC PLAYER ─────────────────────────────────────────────
+  let ytPlayer  = null;
+  let isPlaying = false;
+
+  function initMusicPlayer(videoId) {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+
+    window.onYouTubeIframeAPIReady = function() {
+      ytPlayer = new YT.Player('yt-player', {
+        videoId,
+        playerVars: { autoplay:1, loop:1, playlist:videoId, controls:0, disablekb:1, fs:0, modestbranding:1 },
+        events: {
+          onReady: (e) => { e.target.setVolume(70); e.target.playVideo(); },
+          onStateChange: (e) => {
+            isPlaying = e.data === YT.PlayerState.PLAYING;
+            $('music-toggle').textContent = isPlaying ? '⏸' : '▶';
+            $('music-bar').classList.toggle('paused', !isPlaying);
+          }
+        }
+      });
+    };
+  }
+
+  function toggleMusic() {
+    if (!ytPlayer) return;
+    isPlaying ? ytPlayer.pauseVideo() : ytPlayer.playVideo();
+  }
+
+  function setVolume(val) {
+    if (ytPlayer) ytPlayer.setVolume(parseInt(val));
+  }
+
+  function setupMusic(d) {
+    if (!d.music_url) return;
+    // Supports both plain string and { en, jp } object
+    const url = typeof d.music_url === 'object'
+      ? (d.music_url[lang] || d.music_url['en'])
+      : d.music_url;
+    if (!url || url.includes('XXXXXXXXX')) return;
+    const videoId = extractVideoId(url);
+    if (!videoId) return;
+
+    $('music-player').classList.add('visible');
+    $('music-title').textContent = t(d.content?.music?.headline) || 'UVX MUSIC';
+    initMusicPlayer(videoId);
+  }
+
+  // ── LOAD DATA ────────────────────────────────────────────────
   async function loadData() {
     try {
       const res = await fetch('./content.json');
       if (!res.ok) throw new Error('Failed to load content.json');
       data = await res.json();
       render();
+      setupMusic(data);
     } catch(e) {
       $('loading').innerHTML = `<div style="text-align:center;font-family:monospace;color:#ff2d78;padding:2rem">
         <div style="font-size:2rem;margin-bottom:1rem">⚠</div>
