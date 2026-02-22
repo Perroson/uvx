@@ -103,7 +103,7 @@
   .hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url('hero.jpg');
+    background-image: url('hero.avif');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -528,7 +528,7 @@
     $('gallery-note').textContent = t(d.media.photos.note);
 
     // Auto-load gallery-1.jpg through gallery-10.jpg from the same folder
-    const galleryImages = Array.from({length: 10}, (_, i) => `gallery-${i + 1}.jpg`);
+    const galleryImages = Array.from({length: 10}, (_, i) => `gallery-${i + 1}.avif`);
     $('gallery-grid').innerHTML = galleryImages.map(img => `
       <div class="gallery-item">
         <img src="${img}" alt="UVX event photo" loading="lazy"
